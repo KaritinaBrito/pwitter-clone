@@ -1,12 +1,9 @@
-import React from "react";
-import Sidebar from "./layout/Sidebar";
-import FollowBar from "./layout/FollowBar";
+import React from 'react';
 
-interface LayoutProps {
-  children: React.ReactNode;
-}
+import FollowBar from "@/components/layout/FollowBar"
+import Sidebar from "@/components/layout/Sidebar"
 
-const Layout: React.FC<LayoutProps> = ({ children }) => {
+const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
     <div className="h-screen">
       <div className="container h-full mx-auto xl:px30 max-w-6xl">

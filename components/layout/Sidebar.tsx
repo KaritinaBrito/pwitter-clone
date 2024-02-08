@@ -1,13 +1,16 @@
-import { BsHouseFill } from "react-icons/bs";
-import { MdOutlineMailOutline } from "react-icons/md";
-import { RiFileList2Line } from "react-icons/ri";
-import { FaRegUser, FaRegBell } from "react-icons/fa";
-import SidebarLogo from "./SidebarLogo";
-import SidebarItem from "./SidebarItem";
+import { signOut } from "next-auth/react";
 import { BiLogOut } from "react-icons/bi";
+import { BsHouseFill } from "react-icons/bs";
+import { FaRegBell, FaRegUser } from "react-icons/fa";
+
+import useCurrentUser from "@/hooks/useCurrentUser";
+
+import SidebarItem from "./SidebarItem";
+import SidebarLogo from "./SidebarLogo";
 import SidebarTweetButton from "./SidebarTweetButton";
 
 const Sidebar = () => {
+  const { data: currentUser } = useCurrentUser();
   const items = [
     {
       label: "Home",
@@ -18,21 +21,14 @@ const Sidebar = () => {
       label: "Notifications",
       href: "/notifications",
       icon: FaRegBell,
+      auth: true,
+      alert: currentUser?.hasNotification,
     },
     {
       label: "Profile",
-      href: "/users/123",
+      href: `/users/${currentUser?.id}`,
       icon: FaRegUser,
-    },
-    {
-      label: "Messages",
-      href: "/messages",
-      icon: MdOutlineMailOutline,
-    },
-    {
-      label: "Lists",
-      href: "/lists",
-      icon: RiFileList2Line,
+      auth: true,
     },
   ];
 
@@ -43,18 +39,21 @@ const Sidebar = () => {
           <SidebarLogo />
           {items.map((item) => (
             <SidebarItem
-              key={`side-bar-item-${item.href}`}
+              key={item.href}
+              auth={item.auth}
               href={item.href}
-              label={item.label}
               icon={item.icon}
+              label={item.label}
+              alert={item.alert}
             />
           ))}
-          <SidebarItem
-            onClick={() => {}}
-            icon={BiLogOut}
-            label="Log Out"
-            href="/"
-          />
+          {currentUser && (
+            <SidebarItem
+              onClick={() => signOut()}
+              icon={BiLogOut}
+              label="Logout"
+            />
+          )}
           <SidebarTweetButton />
         </div>
       </div>

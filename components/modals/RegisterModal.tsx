@@ -1,4 +1,8 @@
+import axios from "axios";
 import { useCallback, useState } from "react";
+import { toast } from "react-hot-toast";
+import { signIn } from "next-auth/react";
+
 import Input from "../Input";
 import Modal from "../Modal";
 import useRegisterModal from "@/hooks/useRegisterModal";
@@ -14,19 +18,6 @@ const RegisterModal = () => {
   const [username, setUsername] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const onSubmit = useCallback(() => {
-    try {
-      setIsLoading(true);
-      //Todo add register and Log in
-
-      registerModal.onClose();
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [registerModal]);
-
   const onToggle = useCallback(() => {
     if (isLoading) {
       return;
@@ -36,28 +27,56 @@ const RegisterModal = () => {
     loginModal.onOpen();
   }, [registerModal, loginModal, isLoading]);
 
+  const onSubmit = useCallback(async () => {
+    try {
+      setIsLoading(true);
+
+      await axios.post("/api/register", {
+        email,
+        password,
+        name,
+        username,
+      });
+
+      setIsLoading(false);
+      toast.success("Account created");
+
+      signIn("credentials", {
+        email,
+        password,
+      });
+
+      registerModal.onClose();
+    } catch (error) {
+      toast.error("Something went wrong");
+    } finally {
+      setIsLoading(false);
+    }
+  }, [registerModal, email, password, name, username]);
+
   const bodyContent = (
     <div className="flex flex-col gap-4">
       <Input
-        placehorder="Email"
+        placeholder="Email"
         onChange={(e) => setEmail(e.target.value)}
         value={email}
         disabled={isLoading}
       />
       <Input
-        placehorder="Name"
+        placeholder="Name"
         onChange={(e) => setName(e.target.value)}
         value={name}
         disabled={isLoading}
       />
       <Input
-        placehorder="Username"
+        placeholder="Username"
         onChange={(e) => setUsername(e.target.value)}
         value={username}
         disabled={isLoading}
       />
       <Input
-        placehorder="Password"
+        placeholder="Password"
+        type="password"
         onChange={(e) => setPassword(e.target.value)}
         value={password}
         disabled={isLoading}
