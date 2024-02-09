@@ -69,4 +69,4 @@ $ npm run dev
 
 ## Contact
 
-- GitHub [@your-username](https://github.com/KaritinaBrito)
+- GitHub [@KaritinaBrito](https://github.com/KaritinaBrito)
