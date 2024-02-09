@@ -69,4 +69,4 @@ $ npm run dev
 
 ## Contact
 
-- GitHub [@KaritinaBrito](https://github.com/KaritinaBrito)
+- Website [@KaritinaBrito](https://website-karen-brito.netlify.app)
